@@ -7,7 +7,9 @@ import simplejson as json
 import urlparse
 import settings
 
-@click.command()
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
+@click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('--hostname', default='locahost', help='hostname of slave node')
 @click.option('--port', default=7000, help='port number on which slave daemon runs')
 def add_slave(hostname, port):

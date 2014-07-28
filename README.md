@@ -2,6 +2,9 @@
 
 The following command types are available at the moment
 
+### Setup/Start Mirror Syncing API
+
+Setup and start the Mirror Syncing API first, as explained [here](https://github.com/pramttl/mirror-sync-api)
 
 ### msync-project.py
 

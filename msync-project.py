@@ -67,6 +67,40 @@ def remove_project(project_id, cron):
     click.echo('Removed project')
 
 
+@project_commands.command('update', short_help='Used to update basic parameters of a project.')
+@click.argument('project_id')
+@click.option('project', help='A new name for the project')
+@click.option('--rsynchost', help='New rsync hostname')
+@click.option('--rsyncmod', help='New rsync module name')
+@click.option('--rsyncpwd', help='Updated rsync password if any')
+@click.option('--dest', help='Updated destination for syncing on master node')
+@click.option('--rsync_options', help='Rsync options in json format')
+def update_project_basic(project_id, project, host, rsyncmod, rsyncpwd, dest, cron):
+    """
+    To update basic parameters of a project.
+    """
+    url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
+    url2 = '/update_project/basic/'
+    url = urlparse.urljoin(url1, url2)
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+
+    # Project id is the only required paramter.
+    data['id'] = project_id
+
+    if project:
+        data['project'] = project
+    if host:
+        data['rsync_host'] = host
+    if rsyncmod:
+        data['rsync_module'] = rsyncmod
+    if dest:
+        data['dest'] = dest,
+    if rsync_options:
+        data['rsync_options'] = json.loads(rsync_options)
+
+    r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
+    click.echo('Updated basic project parameters.')
+
 if __name__ == '__main__':
     project_commands()
 

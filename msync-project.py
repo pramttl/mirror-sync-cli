@@ -6,6 +6,7 @@ from requests.auth import HTTPBasicAuth
 import simplejson as json
 import urlparse
 import settings
+from dateutil.parser import parse
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -26,7 +27,7 @@ def project_commands():
 @click.option('--cron', help='Cron options')
 def add_project(project, host, rsyncmod, rsyncpwd, dest, cron):
     """
-    Used to schedule projects for syncing. Most of the paramters are required.
+    To schedule projects for syncing. Most of the paramters are required.
     Cron options is a JSON String like:
     \'{"minute": "*", "start_date": "2014-05-7 18:00"}\'
     """
@@ -52,7 +53,7 @@ def add_project(project, host, rsyncmod, rsyncpwd, dest, cron):
 @click.argument('project_id')
 def remove_project(project_id, cron):
     """
-    Used to schedule projects for syncing. Most of the paramters are required.
+    To schedule projects for syncing. Most of the paramters are required.
     """
     url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
     url2 = '/remove_project/'
@@ -67,7 +68,7 @@ def remove_project(project_id, cron):
     click.echo('Removed project')
 
 
-@project_commands.command('update', short_help='Used to update basic parameters of a project.')
+@project_commands.command('update', short_help='To update basic parameters of a project.')
 @click.argument('project_id')
 @click.option('project', help='A new name for the project')
 @click.option('--rsynchost', help='New rsync hostname')
@@ -100,6 +101,52 @@ def update_project_basic(project_id, project, host, rsyncmod, rsyncpwd, dest, cr
 
     r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
     click.echo('Updated basic project parameters.')
+
+
+@project_commands.command('reschedule', short_help='To update syncing schedule of a project')
+@click.argument('project_id')
+@click.option('--year', help='4-digit year number')
+@click.option('--month', help='month number (1-12)')
+@click.option('--day', help='day of the month (1-31)')
+@click.option('--week', help='ISO week number (1-53)')
+@click.option('--day_of_week', help='number or name of weekday (0-6 or mon,tue,wed,thu,fri,sat,sun)')
+@click.option('--hour', help='hour (0-23)')
+@click.option('--minute', help='minute (0-59)')
+@click.option('--second', help='second (0-59)')
+@click.option('--start_date', help='Start date in human readable string format (fuzzy parsed to python datetime internally)')
+def update_project_schedule(project_id, year, month, day, week, day_of_week, hour, minute, second, start_date):
+    """
+    To update syncing schedule of a project.
+    """
+    url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
+    url2 = '/update_project/schedule/'
+    url = urlparse.urljoin(url1, url2)
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+
+    # Project id is the only required paramter.
+    data['id'] = project_id
+
+    if year:
+        data['year'] = project
+    if month:
+        data['month'] = month
+    if day:
+        data['day'] = day
+    if week:
+        data['week'] = week
+    if day_of_week:
+        data['day_of_week'] = day_of_week
+    if hour:
+        data['hour'] = hour
+    if minute:
+        data['minute'] = minute
+    if second:
+        data['second'] = second
+    if start_date:
+        data['start_date'] = parse(start_date, fuzzy=True)
+
+    r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
+
 
 if __name__ == '__main__':
     project_commands()

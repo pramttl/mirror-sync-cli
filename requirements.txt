@@ -1,5 +1,7 @@
 argparse==1.2.1
 click==2.1
+python-dateutil==2.2
 requests==2.3.0
 simplejson==3.6.0
+six==1.7.3
 wsgiref==0.1.2

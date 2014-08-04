@@ -38,5 +38,7 @@ while using other commands in the cli.
 
 #### msync-slave
 
-    //Todo
+To add or remove slave nodes (ftp hosts) from the cluster.
+
+    msync-slave --help
 

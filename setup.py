@@ -18,8 +18,9 @@ setup(
         packages=['cli',],
         entry_points={
             'console_scripts': [
-                'msync-project=cli.msync_project:main',
                 'msync-configure=cli.set_config:main',
+                'msync-project=cli.msync_project:main',
+                'msync-slave=cli.msync_slave:main',
             ]
         }
 )

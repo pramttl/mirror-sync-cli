@@ -30,7 +30,6 @@ def project_commands():
     Mirror Syncing CLI to add, update, remove projects.
     """
 
-
 @project_commands.command('add', short_help='Used to add a project')
 @click.argument('project')
 @click.argument('host')

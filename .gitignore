@@ -1,4 +1,7 @@
 *~
 venv/*
 *.py[c|m]
-
+build/*
+dist/*
+msync.egg-info/*
+temp/*

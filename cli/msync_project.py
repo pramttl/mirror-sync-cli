@@ -148,6 +148,6 @@ def update_project_schedule(project_id, year, month, day, week, day_of_week, hou
     r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
 
 
-if __name__ == '__main__':
+def main():
     project_commands()
 

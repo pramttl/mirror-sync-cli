@@ -5,7 +5,6 @@ import requests
 from requests.auth import HTTPBasicAuth
 import simplejson as json
 import urlparse
-import settings
 from dateutil.parser import parse
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -45,7 +44,7 @@ def add_project(project, host, rsyncmod, rsyncpwd, dest, cron):
     Cron options is a JSON String like:
     \'{"minute": "*", "start_date": "2014-05-7 18:00"}\'
     """
-    url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
+    url1 = 'http://' + MASTER_HOSTNAME + ':' + str(MASTER_PORT)
     url2 = '/add_project/'
     url = urlparse.urljoin(url1, url2)
 
@@ -59,7 +58,7 @@ def add_project(project, host, rsyncmod, rsyncpwd, dest, cron):
     }
 
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
+    r = requests.post(url, auth=HTTPBasicAuth(ROOT_USERNAME, ROOT_PASSWORD), data=json.dumps(data), headers=headers)
     click.echo('Added the project')
 
 
@@ -69,7 +68,7 @@ def remove_project(project_id, cron):
     """
     To schedule projects for syncing. Most of the paramters are required.
     """
-    url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
+    url1 = 'http://' + MASTER_HOSTNAME + ':' + str(MASTER_PORT)
     url2 = '/remove_project/'
     url = urlparse.urljoin(url1, url2)
 
@@ -78,7 +77,7 @@ def remove_project(project_id, cron):
     }
 
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
+    r = requests.post(url, auth=HTTPBasicAuth(ROOT_USERNAME, ROOT_PASSWORD), data=json.dumps(data), headers=headers)
     click.echo('Removed project')
 
 
@@ -94,7 +93,7 @@ def update_project_basic(project_id, project, host, rsyncmod, rsyncpwd, dest, cr
     """
     To update basic parameters of a project.
     """
-    url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
+    url1 = 'http://' + MASTER_HOSTNAME + ':' + str(MASTER_PORT)
     url2 = '/update_project/basic/'
     url = urlparse.urljoin(url1, url2)
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
@@ -113,7 +112,7 @@ def update_project_basic(project_id, project, host, rsyncmod, rsyncpwd, dest, cr
     if rsync_options:
         data['rsync_options'] = json.loads(rsync_options)
 
-    r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
+    r = requests.post(url, auth=HTTPBasicAuth(ROOT_USERNAME, ROOT_PASSWORD), data=json.dumps(data), headers=headers)
     click.echo('Updated basic project parameters.')
 
 
@@ -132,7 +131,7 @@ def update_project_schedule(project_id, year, month, day, week, day_of_week, hou
     """
     To update syncing schedule of a project.
     """
-    url1 = 'http://' + settings.MASTER_HOSTNAME + ':' + str(settings.MASTER_PORT)
+    url1 = 'http://' + MASTER_HOSTNAME + ':' + str(MASTER_PORT)
     url2 = '/update_project/schedule/'
     url = urlparse.urljoin(url1, url2)
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
@@ -159,7 +158,7 @@ def update_project_schedule(project_id, year, month, day, week, day_of_week, hou
     if start_date:
         data['start_date'] = parse(start_date, fuzzy=True)
 
-    r = requests.post(url, auth=HTTPBasicAuth('root', 'root'), data=json.dumps(data), headers=headers)
+    r = requests.post(url, auth=HTTPBasicAuth(ROOT_USERNAME, ROOT_PASSWORD), data=json.dumps(data), headers=headers)
 
 
 def main():

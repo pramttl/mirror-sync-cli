@@ -10,6 +10,20 @@ from dateutil.parser import parse
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
+try:
+    f = open('config.cfg')
+    config = json.loads(f.read())
+    ROOT_USERNAME = config['username']
+    ROOT_PASSWORD = config['password']
+    MASTER_HOSTNAME = config['master_hostname']
+    MASTER_HOSTNAME = int(config['master_port'])
+    f.close()
+except:
+    ROOT_USERNAME = 'root'
+    ROOT_PASSWORD = 'root'
+    MASTER_HOSTNAME = 'localhost'
+    MASTER_PORT = 5000
+
 
 @click.group()
 def project_commands():

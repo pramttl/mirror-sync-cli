@@ -9,7 +9,7 @@ dependencies = ['click', 'simplejson', 'requests', 'python-dateutil',]
 
 setup(
         name='msync',
-        version='0.0.1',
+        version='0.0.2',
         description='Mirror Syncing CLI',
         url='https://github.com/pramttl/mirror-sync-cli',
         author='Pranjal Mittal',
@@ -18,7 +18,8 @@ setup(
         packages=['cli',],
         entry_points={
             'console_scripts': [
-                'msync-project=cli.msync_project:main'
+                'msync-project=cli.msync_project:main',
+                'msync-configure=cli.set_config:main',
             ]
         }
 )

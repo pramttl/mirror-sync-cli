@@ -1,4 +1,0 @@
-MASTER_HOSTNAME = 'localhost'
-MASTER_PORT = 5000
-ROOT_USER = 'root'
-ROOT_PASSWORD = 'root'

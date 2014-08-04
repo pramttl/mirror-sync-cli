@@ -5,3 +5,4 @@ build/*
 dist/*
 msync.egg-info/*
 temp/*
+cli/config.cfg

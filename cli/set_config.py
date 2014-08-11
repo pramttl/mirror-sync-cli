@@ -32,7 +32,8 @@ def config_commands():
 def set_root_credentials(username, password):
     """
     Allows the user to tell the CLI the root credentials to connect to the
-    mirror-sync-api
+    mirror-sync-api.
+    Default root credentials: root, root
     """
     # Read original config and update
     f = open(CONFIG_FILE, 'r')
@@ -54,6 +55,7 @@ def set_master(hostname, port):
     """
     Allows the user to tell the details of the master node and the master api
     daemon the cli indirectly connects to for issuing commands.
+    Default hostname and port: localhost, 5000)
     """
     # Read original config and update
     f = open(CONFIG_FILE, 'r')

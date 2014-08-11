@@ -5,11 +5,17 @@ try:
 except:
     from distutils.core import setup
 
+import sys
+import os
+
+USR_DIR = sys.prefix
+CONFIG_DIR = os.path.join(USR_DIR, 'local/mirror-sync-cli')
+
 dependencies = ['click', 'simplejson', 'requests', 'python-dateutil',]
 
 setup(
         name='msync',
-        version='0.0.2',
+        version='0.0.3',
         description='Mirror Syncing CLI',
         url='https://github.com/pramttl/mirror-sync-cli',
         author='Pranjal Mittal',
@@ -22,5 +28,6 @@ setup(
                 'msync-project=cli.msync_project:main',
                 'msync-slave=cli.msync_slave:main',
             ]
-        }
+        },
+        data_files=[(CONFIG_DIR, ['config/config.cfg',]),]
 )

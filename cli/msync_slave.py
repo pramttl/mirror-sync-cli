@@ -8,8 +8,21 @@ import urlparse
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
+import os
+import sys
+USR_DIR = sys.prefix
+CONFIG_DIR = os.path.join(USR_DIR, 'local/mirror-sync-cli')
+
+CONFIG_FILE = 'config/config.cfg'
+for loc in os.curdir, os.path.expanduser("~"), CONFIG_DIR, os.environ.get("MYPROJECT_CONF"):
+    try: 
+        open(TEMP_CONFIG_FILE)
+        CONFIG_FILE = TEMP_CONFIG_FILE
+    except:
+        pass
+
 try:
-    f = open('config.cfg')
+    f = open(CONFIG_FILE)
     config = json.loads(f.read())
     ROOT_USERNAME = config['username']
     ROOT_PASSWORD = config['password']

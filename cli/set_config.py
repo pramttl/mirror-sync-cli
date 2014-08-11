@@ -3,6 +3,20 @@
 import click
 import simplejson as json
 
+import os
+import sys
+USR_DIR = sys.prefix
+CONFIG_DIR = os.path.join(USR_DIR, 'local/mirror-sync-cli')
+
+CONFIG_FILE = 'config/config.cfg'
+for loc in os.curdir, os.path.expanduser("~"), CONFIG_DIR, os.environ.get("MYPROJECT_CONF"):
+    try: 
+        TEMP_CONFIG_FILE = os.path.join(loc, "config.cfg")
+        open(TEMP_CONFIG_FILE)
+        CONFIG_FILE = TEMP_CONFIG_FILE
+    except:
+        pass
+
 @click.group()
 def config_commands():
     """
@@ -21,14 +35,14 @@ def set_root_credentials(username, password):
     mirror-sync-api
     """
     # Read original config and update
-    f = open('config.cfg', 'r')
+    f = open(CONFIG_FILE, 'r')
     config = json.loads(f.read())
     config['username'] = username
     config['password'] = password
     f.close()
 
     # Write updated config
-    f = open('config.cfg', 'w')
+    f = open(CONFIG_FILE, 'w')
     f.write(json.dumps(config))
     f.close()
 
@@ -42,14 +56,14 @@ def set_master(hostname, port):
     daemon the cli indirectly connects to for issuing commands.
     """
     # Read original config and update
-    f = open('config.cfg', 'r')
+    f = open(CONFIG_FILE, 'r')
     config = json.loads(f.read())
     config['master_hostname'] = hostname
     config['master_port'] = int(port)
     f.close()
 
     # Write updated config
-    f = open('config.cfg', 'w')
+    f = open(CONFIG_FILE, 'w')
     f.write(json.dumps(config))
     f.close()
 

@@ -95,7 +95,7 @@ def remove_project(project_id, cron):
 
 @project_commands.command('update', short_help='To update basic parameters of a project.')
 @click.argument('project_id')
-@click.option('project', help='A new name for the project')
+@click.option('--project', help='A new name for the project')
 @click.option('--rsynchost', help='New rsync hostname')
 @click.option('--rsyncmod', help='New rsync module name')
 @click.option('--rsyncpwd', help='Updated rsync password if any')
@@ -173,6 +173,23 @@ def update_project_schedule(project_id, year, month, day, week, day_of_week, hou
     r = requests.post(url, auth=HTTPBasicAuth(ROOT_USERNAME, ROOT_PASSWORD), data=json.dumps(data), headers=headers)
 
 
+@project_commands.command('list', short_help='To list ids of existing projects scheduled for syncing.')
+def list_projects():
+    """
+    To list id's of exisitng projects scheduled for syncing.
+    Id's of projects are same as name by default.
+    """
+    url1 = 'http://' + MASTER_HOSTNAME + ':' + str(MASTER_PORT)
+    url2 = '/list_projects/'
+    url = urlparse.urljoin(url1, url2)
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    r = requests.get(url, auth=HTTPBasicAuth(ROOT_USERNAME, ROOT_PASSWORD), data=json.dumps(dict()), headers=headers)
+    projects = json.loads(r.text)
+    for project in projects:
+        click.echo(project['id'])
+
 def main():
     project_commands()
 
+if __name__=='__main__':
+    main()

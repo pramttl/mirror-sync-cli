@@ -14,6 +14,12 @@ start it before using the CLI commands.
     source venv/bin/activate    #Optional
     python setup.py install
 
+To update an existing installation
+
+    # Activate venv in context if any
+    pip uninstall msync
+    cd /path/to/mirror-sync-cli
+    python setup.py install
 
 ## Commands
 

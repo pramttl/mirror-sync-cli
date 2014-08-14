@@ -29,7 +29,7 @@ try:
     ROOT_USERNAME = config['username']
     ROOT_PASSWORD = config['password']
     MASTER_HOSTNAME = config['master_hostname']
-    MASTER_HOSTNAME = int(config['master_port'])
+    MASTER_PORT = int(config['master_port'])
     f.close()
 except:
     ROOT_USERNAME = 'root'
@@ -44,29 +44,66 @@ def project_commands():
     """
 
 @project_commands.command('add', short_help='Used to add a project')
-@click.argument('project')
-@click.argument('host')
-@click.argument('rsyncmod')
-@click.argument('rsyncpwd')
-@click.argument('dest')
-@click.option('--cron', help='Cron options')
-def add_project(project, host, rsyncmod, rsyncpwd, dest, cron):
+@click.option('--project', help='Name/Unique ID of project', default=None)
+@click.option('--rsynchost', help='Hostname of rsync host', default=None)
+@click.option('--rsyncmod', help='Rsync module name', default=None)
+@click.option('--rsyncpwd', help='Rsync password', default=None)
+@click.option('--dest', help='Absolute path on master node as per master node rsync module.', default=None)
+@click.option('--year', help='4-digit year number')
+@click.option('--month', help='month number (1-12)')
+@click.option('--day', help='day of the month (1-31)')
+@click.option('--week', help='ISO week number (1-53)')
+@click.option('--day_of_week', help='number or name of weekday (0-6 or mon,tue,wed,thu,fri,sat,sun)')
+@click.option('--hour', help='hour (0-23)')
+@click.option('--minute', help='minute (0-59)')
+@click.option('--second', help='second (0-59)')
+@click.option('--start_date', help='Start date in human readable string format (fuzzy parsed to python datetime internally)')
+def add_project(project, rsynchost, rsyncmod, rsyncpwd, dest, year, month, day, week,
+                day_of_week, hour, minute, second, start_date):
     """
-    To schedule projects for syncing. Most of the paramters are required.
-    Cron options is a JSON String like:
-    \'{"minute": "*", "start_date": "2014-05-7 18:00"}\'
+    To schedule projects for syncing.
     """
-    url1 = 'http://' + MASTER_HOSTNAME + ':' + str(MASTER_PORT)
+    url1 = 'http://' + str(MASTER_HOSTNAME) + ':' + str(MASTER_PORT)
     url2 = '/add_project/'
     url = urlparse.urljoin(url1, url2)
+
+    required_list = ['project', 'rsynchost', 'rsyncmod', 'rsyncpwd', 'dest']
+    error = False
+    for required_item in required_list:
+        if not eval(required_item):
+            error = True
+            click.echo("Missing parameter '--%s'"%(required_item))
+
+    if error:
+        return
+
+    cron_options = {}
+    if year:
+        cron_options['year'] = project
+    if month:
+        cron_options['month'] = month
+    if day:
+        cron_options['day'] = day
+    if week:
+        cron_options['week'] = week
+    if day_of_week:
+        cron_options['day_of_week'] = day_of_week
+    if hour:
+        cron_options['hour'] = hour
+    if minute:
+        cron_options['minute'] = minute
+    if second:
+        cron_options['second'] = second
+    if start_date:
+        cron_options['start_date'] = parse(start_date, fuzzy=True)
 
     data = {
      "project": project,
      "rsync_module": rsyncmod,                             # rsync module
-     "rsync_host": host,
+     "rsync_host": rsynchost,
      "dest": dest,
      "rsync_password": rsyncpwd,
-     "cron_options": json.loads(cron),
+     "cron_options": cron_options,
     }
 
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}

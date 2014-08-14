@@ -27,7 +27,7 @@ try:
     ROOT_USERNAME = config['username']
     ROOT_PASSWORD = config['password']
     MASTER_HOSTNAME = config['master_hostname']
-    MASTER_HOSTNAME = int(config['master_port'])
+    MASTER_PORT = int(config['master_port'])
     f.close()
 except:
     ROOT_USERNAME = 'root'

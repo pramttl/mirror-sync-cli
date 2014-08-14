@@ -69,6 +69,21 @@ Commands:
     reschedule  To update syncing schedule of a project
     update      To update basic parameters of a project.
 
+**Examples**:
+
+Adding a project
+
+    # Schedule a project for syncing in the first minute of every 2 hours
+    msync-project add --project ubuntu --rsyncmod documents  --rsynchost myhost --rsyncpwd password --minute * --hour */2
+
+Removing a project
+
+    msync-project remove ubuntu
+
+Rescheduling a project
+
+    # To sync every 3 minutes
+    msync-project reschedule --minute */3
 
 ### msync-slave
 
@@ -80,4 +95,14 @@ Commands:
 
     add     Used to add a slave to the mirror syncing cluster
     remove  Used to remove a slave from the mirror syncing cluster
+
+**Examples**:
+
+To run a slave node on localhost on port 7000
+
+    msync-slave add --hostname localhost --port 700
+
+To remove slave on a particular host machine.
+
+    msync-slave remove --hostname localhost
 
